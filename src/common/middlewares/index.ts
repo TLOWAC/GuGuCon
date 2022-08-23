@@ -1,3 +1,1 @@
-export function template() {
-  return '';
-}
+export * from './loggingMiddleware';
