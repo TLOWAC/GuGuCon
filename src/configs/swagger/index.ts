@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 
 export class Swagger {
@@ -7,8 +7,10 @@ export class Swagger {
 
 	constructor(app: INestApplication) {
 		this.app = app;
+		this.build();
 	}
-	build() {
+
+	private build() {
 		const options = new DocumentBuilder()
 			.setTitle('NestJS Realworld Example App')
 			.setDescription('The Realworld API description')
@@ -20,7 +22,7 @@ export class Swagger {
 		this.document = document;
 	}
 
-	setup() {
+	pageSetup() {
 		SwaggerModule.setup('/docs', this.app, this.document);
 	}
 }
