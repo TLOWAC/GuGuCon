@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import chalk from 'chalk';
 import { Request, Response } from 'express';
 import prettyjson, { RendererOptions } from 'prettyjson';
 import { Observable } from 'rxjs';
@@ -12,10 +13,15 @@ export class LoggingInterceptor implements NestInterceptor {
 	private prettyJsonConfig: RendererOptions = {
 		keysColor: 'rainbow',
 		dashColor: 'magenta',
-		stringColor: 'white',
+		// stringColor: 'white',
 		defaultIndentation: 4,
 	};
 
+	/**
+	 * 사용자 요청 전/후 실행
+	 * @param context Interface describing details about the current request pipeline.
+	 * @param next Interface providing access to the response stream.
+	 */
 	public intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
 		const ctx = context.switchToHttp();
 		this.request = ctx.getRequest<Request>();
@@ -23,7 +29,6 @@ export class LoggingInterceptor implements NestInterceptor {
 
 		this.loggingRequest();
 
-		// :timestamp :method :url
 		return next.handle().pipe(
 			tap({
 				next: (value) => {
@@ -36,70 +41,54 @@ export class LoggingInterceptor implements NestInterceptor {
 		);
 	}
 
+	/**
+	 * request 로그 출력
+	 */
 	private loggingRequest() {
 		const { originalUrl, method, params, query, body, headers } = this.request;
-		// Logger.log(`
-		// /* --------------------------------- 📭 Request -------------------------------- */
-		// headers		: ${{ headers }}
-		// path		: ${originalUrl}
-		// method		: ${method}
-		// params		: ${JSON.stringify(params)}
-		// query		: ${JSON.stringify(query)}
-		// body		: ${JSON.stringify(body)}
-		// 		`);
-
-		// Logger.log(`/* --------------------------------- 📭 Request -------------------------------- */`, {
-		// 	timestamp: new Date().toISOString(),
-		// 	originalUrl,
-		// 	method,
-		// 	params,
-		// 	query,
-		// 	body,
-		// });
+		const reqFormat = {
+			timestamp: new Date().toISOString(),
+			originalUrl,
+			method,
+			params,
+			query,
+			body,
+			headers,
+		};
 
 		Logger.log(
-			`/* --------------------------------- 📭 Request -------------------------------- */`,
-		);
-		Logger.log(
-			prettyjson.render(
-				{
-					timestamp: new Date().toISOString(),
-					originalUrl,
-					method,
-					params,
-					query,
-					body,
-					headers,
-				},
-				this.prettyJsonConfig,
+			chalk.blue(
+				`/* --------------------------------- 📭 Request -------------------------------- */`,
 			),
 		);
+		Logger.log(prettyjson.render(reqFormat, this.prettyJsonConfig));
 	}
 
+	/**
+	 * response 로그 출력
+	 * @param data response data
+	 */
 	private loggingResponse(data: any) {
 		const { statusCode } = this.response;
 
-		// Logger.log(`
-		// /* --------------------------------- 📬 Response -------------------------------- */
-		// statusCode	: ${statusCode}
-		// data		: ${data}
-		// 		`);
+		const resFormat = {
+			timestamp: new Date().toISOString(),
+			statusCode,
+			data,
+		};
 
-		Logger.debug(
-			`/* --------------------------------- 📬 Response -------------------------------- */`,
-		);
 		Logger.log(
-			prettyjson.render(
-				{
-					timestamp: new Date().toISOString(),
-					statusCode,
-					data,
-				},
-				this.prettyJsonConfig,
+			chalk.green(
+				`/* --------------------------------- 📬 Response -------------------------------- */`,
 			),
 		);
+		Logger.log(prettyjson.render(resFormat, this.prettyJsonConfig));
 	}
 
+	/**
+	 * 에러 로그 출력
+	 * @param error Error Object
+	 */
 	private loggingErrResponse(error: Error) {
 		const statusCode =
 			error instanceof HttpException ? error.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
@@ -107,19 +96,20 @@ export class LoggingInterceptor implements NestInterceptor {
 
 		const { url, method } = this.request;
 
-		const errorResponse = {
+		const errFormat = {
 			timestamp: new Date().toISOString(), // 에러 발생 시간
 			statusCode, // 에러 코드
 			path: url, // url 경로
 			method, // http method 정보
 			message, // 에러 메시지
+			exceptionStack: chalk.red(error.stack),
 		};
 
-		// 에러 메시지 로그 출력
 		Logger.error(
-			prettyjson.render(errorResponse, this.prettyJsonConfig),
-			error.stack,
-			'ExceptionFilter',
+			chalk.redBright(
+				`/* --------------------------------- 📮 Response -------------------------------- */`,
+			),
 		);
+		Logger.error(prettyjson.render(errFormat, this.prettyJsonConfig));
 	}
 }
