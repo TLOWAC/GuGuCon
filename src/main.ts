@@ -28,7 +28,7 @@ class ExpressServer {
 	}
 
 	private middlewareBuild() {
-		this.app.use(morgan('combined'));
+		// this.app.use(morgan('combined'));
 		this.app.use(cookieParser());
 	}
 
