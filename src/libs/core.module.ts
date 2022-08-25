@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { environment, validationSchema } from './constant';
+import { configuration, validationSchema } from './constant';
+import { DatabaseModule } from './database';
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-			load: [environment],
-			envFilePath: `.env.${process.env.NODE_ENV}}`,
-			validationSchema: validationSchema,
-		}),
-	],
-	controllers: [],
-	providers: [],
+        imports: [
+                ConfigModule.forRoot({
+                        isGlobal: true,
+                        load: [configuration],
+                        envFilePath: `${process.env.NODE_ENV}.env`,
+                        validationSchema: validationSchema,
+                }),
+                DatabaseModule,
+        ],
+        controllers: [],
+        providers: [],
 })
 export class CoreModule {}
