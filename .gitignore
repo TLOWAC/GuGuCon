@@ -39,3 +39,7 @@ REFERENCES.MD
 documentation/*
 
 src/environments/*
+
+.env
+dev.env
+prod.env
