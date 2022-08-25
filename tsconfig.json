@@ -1,29 +1,30 @@
 {
-	"compilerOptions": {
-		"module": "commonjs",
-		"esModuleInterop": true,
-		"declaration": true,
-		"removeComments": true,
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
-		"target": "es2017",
-		"sourceMap": true,
-		"outDir": "./dist",
-		"incremental": true,
-		"skipLibCheck": true,
-		"strictNullChecks": false,
-		"noImplicitAny": false,
-		"strictBindCallApply": false,
-		"forceConsistentCasingInFileNames": false,
-		"noFallthroughCasesInSwitch": false,
-		"baseUrl": "./src",
-		"paths": {
-			"@config/*": ["configs/*"],
-			"@common/*": ["common/*"],
-			"@entities/*": ["entities/*"],
-			"@environments": ["environments"]
-		}
-	},
-	"exclude": ["node_modules"]
+        "compilerOptions": {
+                "module": "commonjs",
+                "esModuleInterop": true,
+                "declaration": true,
+                "removeComments": true,
+                "emitDecoratorMetadata": true,
+                "experimentalDecorators": true,
+                "allowSyntheticDefaultImports": true,
+                "target": "es2017",
+                "sourceMap": true,
+                "outDir": "./dist",
+                "incremental": true,
+                "skipLibCheck": true,
+                "strictNullChecks": false,
+                "noImplicitAny": false,
+                "strictBindCallApply": false,
+                "forceConsistentCasingInFileNames": false,
+                "noFallthroughCasesInSwitch": false,
+                "baseUrl": "./src",
+                "paths": {
+                        "@config/*": ["configs/*"],
+                        "@common/*": ["common/*"],
+                        "@entities/*": ["entities/*"],
+                        "@repositories/*": ["repositories/*"],
+                        "@environments": ["environments"]
+                }
+        },
+        "exclude": ["node_modules"]
 }
