@@ -6,13 +6,13 @@ import { UserModule } from './apis/v1/user/user.module';
 import { CoreModule } from './libs/core.module';
 
 @Module({
-	imports: [CoreModule, UserModule],
-	controllers: [],
-	providers: [
-		{
-			provide: APP_INTERCEPTOR,
-			useClass: LoggingInterceptor,
-		},
-	],
+        imports: [CoreModule, UserModule],
+        controllers: [],
+        providers: [
+                {
+                        provide: APP_INTERCEPTOR,
+                        useClass: LoggingInterceptor,
+                },
+        ],
 })
 export class AppModule {}

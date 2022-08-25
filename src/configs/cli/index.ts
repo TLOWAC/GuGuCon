@@ -1,10 +1,10 @@
 import gradient from 'gradient-string';
 
 export function awesomeCli() {
-  const coolGradient = gradient('red', 'blue', 'green');
+        const coolGradient = gradient('red', 'blue', 'green');
 
-  // TODO: env > author 로 변경.
-  const coolString = coolGradient(String.raw`
+        // TODO: env > author 로 변경.
+        const coolString = coolGradient(String.raw`
 
   /$$$$$$$$ /$$        /$$$$$$  /$$      /$$  /$$$$$$   /$$$$$$ 
  |__  $$__/| $$       /$$__  $$| $$  /$ | $$ /$$__  $$ /$$__  $$
@@ -17,5 +17,5 @@ export function awesomeCli() {
 
     Made By ChangHun Lee
       `);
-  return coolString;
+        return coolString;
 }
