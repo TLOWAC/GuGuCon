@@ -4,6 +4,7 @@ import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 export class Swagger {
         app: INestApplication;
         document: OpenAPIObject;
+        logger: Logger = new Logger(Swagger.name);
 
         constructor(app: INestApplication) {
                 this.app = app;
@@ -24,5 +25,6 @@ export class Swagger {
 
         pageSetup() {
                 SwaggerModule.setup('/docs', this.app, this.document);
+                this.logger.log('Swagger Setup');
         }
 }
