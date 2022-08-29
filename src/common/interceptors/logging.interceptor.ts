@@ -16,7 +16,7 @@ export class LoggingInterceptor implements NestInterceptor {
                 // stringColor: 'white',
                 defaultIndentation: 4,
         };
-
+        private logger: Logger = new Logger('HTTP');
         /**
          * 사용자 요청 전/후 실행
          * @param context Interface describing details about the current request pipeline.
@@ -56,12 +56,12 @@ export class LoggingInterceptor implements NestInterceptor {
                         headers,
                 };
 
-                Logger.log(
+                this.logger.log(
                         chalk.blue(
                                 `/* --------------------------------- 📭 Request -------------------------------- */`,
                         ),
                 );
-                Logger.log(prettyjson.render(reqFormat, this.prettyJsonConfig));
+                this.logger.log(prettyjson.render(reqFormat, this.prettyJsonConfig));
         }
 
         /**
@@ -77,16 +77,16 @@ export class LoggingInterceptor implements NestInterceptor {
                         data,
                 };
 
-                Logger.log(
+                this.logger.log(
                         chalk.green(
                                 `/* --------------------------------- 📬 Response -------------------------------- */`,
                         ),
                 );
-                Logger.log(prettyjson.render(resFormat, this.prettyJsonConfig));
+                this.logger.log(prettyjson.render(resFormat, this.prettyJsonConfig));
         }
 
         /**
-         * 에러 로그 출력
+         * error 로그 출력
          * @param error Error Object
          */
         private loggingErrResponse(error: Error) {
@@ -108,11 +108,12 @@ export class LoggingInterceptor implements NestInterceptor {
                         exceptionStack: chalk.red(error.stack),
                 };
 
-                Logger.error(
+                this.logger.error(
                         chalk.redBright(
                                 `/* --------------------------------- 📮 Response -------------------------------- */`,
                         ),
                 );
-                Logger.error(prettyjson.render(errFormat, this.prettyJsonConfig));
+                this.logger.error(prettyjson.render(errFormat, this.prettyJsonConfig));
+                this.response.status(statusCode).json(errFormat);
         }
 }
