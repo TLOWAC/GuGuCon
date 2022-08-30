@@ -2,11 +2,11 @@ import { INestApplication } from '@nestjs/common';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { awesomeCli, Swagger } from 'configs';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
 import { AppModule } from './app.module';
-import { awesomeCli } from './configs/cli';
-import { Swagger } from './configs/swagger';
 
 class ExpressServer {
         app: INestApplication;
@@ -27,7 +27,7 @@ class ExpressServer {
         }
 
         private middlewareBuild() {
-                // this.app.use(morgan('combined'));
+                this.app.use(helmet());
                 this.app.use(cookieParser());
         }
 
