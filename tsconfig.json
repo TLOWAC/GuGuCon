@@ -19,12 +19,12 @@
                 "noFallthroughCasesInSwitch": false,
                 "baseUrl": "./src",
                 "paths": {
-                        "@config/*": ["configs/*"],
-                        "@common/*": ["common/*"],
-                        "@entities/*": ["entities/*"],
-                        "@repositories/*": ["repositories/*"],
-                        "@environments": ["environments"]
+                        "@@shared/*": ["shareds/*"],
+                        "@@common/*": ["common/*"],
+                        "@@database/*": ["database/*"],
+                        "@@environments": ["environments"],
+                        "@@repositories": ["repositories/*"]
                 }
         },
-        "exclude": ["node_modules"]
+        "exclude": ["node_modules", "dist"]
 }
