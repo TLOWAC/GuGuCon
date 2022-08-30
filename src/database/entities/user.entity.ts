@@ -15,8 +15,14 @@ export class User {
         isActive: boolean;
 
         @Column()
-        email: string;
+        username: string;
+
+        @Column()
+        password: string;
 
         @Column()
         age: number;
+
+        @Column()
+        point: number;
 }
