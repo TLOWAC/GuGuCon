@@ -4,15 +4,14 @@ import { DataSourceOptions } from 'typeorm';
 
 dotenv.config();
 
-export const defaultOrmConfigOptions: DataSourceOptions = {
+export const dataSourceOptions: DataSourceOptions = {
         type: 'mysql',
         host: env.DATABASE_HOST,
         port: parseInt(env.DATABASE_PORT),
         username: env.DATABASE_USERNAME,
         password: env.DATABASE_PASSWORD,
         database: env.DATABASE_NAME,
-        entities: ['src/database/entities/**/*.entity.ts'],
-        migrations: ['src/database/migrations/*.ts'],
+        entities: ['dist/**/*.entity{.ts,.js}'],
         migrationsTableName: 'migrations',
         synchronize: false,
         dropSchema: false,
