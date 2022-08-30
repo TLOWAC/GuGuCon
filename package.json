@@ -27,19 +27,21 @@
                 "docker:seed": "docker exec -it nest-api npm run seed",
                 "docker": "docker-compose up -d",
                 "docker:build": "docker-compose build",
-                "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d ./src/configs/mysql.config.ts",
+                "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d ./src/configs/database/mysql-datasource.config.ts",
                 "migration:create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:create ./src/database/migrations/migrations/$npm_config_name",
                 "migration:generate": "npm run typeorm -- migration:generate ./src/database/migrations/migrations/$npm_config_name",
                 "migration:run": "npm run typeorm -- migration:run",
                 "migration:revert": "npm run typeorm -- migration:revert",
                 "schema:sync": "npm run typeorm -- schema:sync",
-                "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js --root ./src/configs/database --configName seed.config.ts config",
-                "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js --root ./src/configs/database --configName seed.config.ts seed",
-                "seed:one": "ts-node ./node_modules/typeorm-seeding/dist/cli.js --root ./src/configs/database --configName seed.config.ts --seed"
+                "seed:config": "typeorm-seeding config -r ./dist/src/configs/database -c seed-datasource.config.js",
+                "seed:run": "typeorm-seeding seed -r ./dist/src/configs/database -c seed-datasource.config.js",
+                "seed:one": "typeorm-seeding seed -r ./dist/src/configs/database -c seed-datasource.config.js --seed"
         },
         "_comment": {
                 "seed": "seed 명령어들의 경우 Module[typeorm-seeding] 이 TypeORM@0.3 버전을 지원하고 있지 않아서 따로 ORM 설정을 사용하였습니다.",
-                "docker:seed": "docker:seed 명령어의 경우 Docker Container 를 생성한뒤에 시드 데이터를 입력하는것처럼 보인다."
+                "docker:seed": "docker:seed 명령어의 경우 Docker Container 를 생성한뒤에 시드 데이터를 입력하는것처럼 보인다.",
+                "migration:generate": "entity ( Schema ) 변경 사항을 마이그레이션 파일로 생성한다.",
+                "migration:run": "프로젝트에 생성된 마이그레이션 파일들로 Database 마이그레이션을 진행한다."
         },
         "jest": {
                 "collectCoverageFrom": [
@@ -83,10 +85,10 @@
                 "reflect-metadata": "^0.1.13",
                 "rimraf": "^3.0.2",
                 "rxjs": "^7.2.0",
-                "typeorm": "0.3.7",
-                "typeorm-seeding": "^1.6.1"
+                "typeorm": "0.3.7"
         },
         "devDependencies": {
+                "@concepta/typeorm-seeding": "^4.0.0-beta.0",
                 "@faker-js/faker": "^7.5.0",
                 "@nestjs/cli": "^8.0.0",
                 "@nestjs/schematics": "^8.0.0",
