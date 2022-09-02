@@ -2,9 +2,11 @@ import { INestApplication } from '@nestjs/common';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { awesomeCli, Swagger } from 'configs';
+import { Swagger } from 'configs';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+
+import { bootTerminalPrint } from '@@shared/utils';
 
 import { AppModule } from './app.module';
 
@@ -40,8 +42,8 @@ class ExpressServer {
                 this.config = this.app.get(ConfigService);
                 this.swagger = new Swagger(this.app);
 
-                this.pipeBuild();
                 this.middlewareBuild();
+                this.pipeBuild();
                 this.documentBuild();
         }
 
@@ -54,7 +56,7 @@ class ExpressServer {
                                 )}/docs`,
                         );
                         Logger.log(`Running in ${this.config.get('environment')} mode`);
-                        Logger.log(awesomeCli());
+                        Logger.log(bootTerminalPrint());
                 });
         }
 }
