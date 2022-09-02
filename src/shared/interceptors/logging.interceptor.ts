@@ -114,6 +114,5 @@ export class LoggingInterceptor implements NestInterceptor {
                         ),
                 );
                 this.logger.error(prettyjson.render(errFormat, this.prettyJsonConfig));
-                this.response.status(statusCode).json(errFormat);
         }
 }
