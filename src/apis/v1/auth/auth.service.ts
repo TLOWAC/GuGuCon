@@ -9,6 +9,8 @@ import { JwtService } from '@nestjs/jwt';
 import bcryptjs from 'bcryptjs';
 import { Auth, google } from 'googleapis';
 
+import { User } from '@@database/entities';
+
 import { UserService } from '../user/user.service';
 import { loginUserDTO, RegisterUserDTO } from './dto';
 
@@ -23,16 +25,17 @@ export class AuthService {
                 this.ouathClient = new google.auth.OAuth2(clientId, clientSecret);
         }
 
-        async validateUser({ username, password }: { username: string; password: string }) {
+        async validateUser(loginUserDTO: loginUserDTO) {
                 try {
-                        const user = await this.userService.findUserByEmail(username);
+                        const { username, password } = loginUserDTO;
+                        const user = await this.userService.findUserByEmail({ username });
+                        const hashedPassword = user.password;
 
-                        const isValid = bcryptjs.compareSync(user.password, password);
-                        if (!isValid) {
-                                throw new BadRequestException();
+                        const isvalidPassword = bcryptjs.compare(hashedPassword, password);
+
+                        if (!user || !isvalidPassword) {
+                                throw new NotAcceptableException('no matching user exist');
                         }
-
-                        return user;
                 } catch (e) {
                         this.logger.error(e);
                 }
@@ -49,24 +52,14 @@ export class AuthService {
                 // this.userService.registerUserBySocial;
         }
 
-        async login(loginUserDTO: loginUserDTO) {
+        async login(user: User) {
                 try {
-                        const { username, password } = loginUserDTO;
-                        const user = await this.userService.findOneUserByOption({ username });
-                        const hashedPassword = user.password;
-
-                        const isvalidPassword = bcryptjs.compare(hashedPassword, password);
-
-                        if (!user || !isvalidPassword) {
-                                throw new NotAcceptableException('no matching user exist');
-                        }
-
                         // generate jwt access token
-                        const payload = { username: user.username, sub: user.id };
+                        const payload = { sub: user.id, username: user.username };
                         const jwtAccessToken = this.jwtService.sign(payload);
 
                         return {
-                                access_token: jwtAccessToken,
+                                accessToken: jwtAccessToken,
                         };
                 } catch (e) {
                         this.logger.error(e);

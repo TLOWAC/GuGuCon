@@ -1,7 +1,8 @@
-import { User } from '@entities/index';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepository } from 'repositories';
+
+import { User } from '@@database/entities';
+import { UserRepository } from '@@database/repositories';
 
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
