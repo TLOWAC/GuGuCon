@@ -1,4 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { UserService } from 'apis/v1/user/user.service';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -9,11 +10,11 @@ type JWTPayload = {
 };
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-        constructor(private userService: UserService) {
+        constructor(private userService: UserService, private configService: ConfigService) {
                 super({
-                        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+                        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // Header.Authorization 에 셋팅된 Bear 토큰을 사용한다.
                         ignoreExpiration: false,
-                        secretOrKey: process.env.JWT_SECRET,
+                        secretOrKey: configService.get<string>('JWT_SECRET'),
                 });
         }
         async validate(payload: JWTPayload) {
