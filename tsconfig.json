@@ -19,11 +19,10 @@
                 "noFallthroughCasesInSwitch": false,
                 "baseUrl": "./src",
                 "paths": {
-                        "@@shared/*": ["shareds/*"],
-                        "@@common/*": ["common/*"],
+                        "@/*": ["/*"],
+                        "@@shared/*": ["shared/*"],
                         "@@database/*": ["database/*"],
-                        "@@environments": ["environments"],
-                        "@@repositories": ["repositories/*"]
+                        "@@environments/*": ["environments/*"]
                 }
         },
         "exclude": ["node_modules", "dist"]
