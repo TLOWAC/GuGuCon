@@ -27,7 +27,7 @@ import { loginUserDTO, RegisterUserDTO } from './dto';
 import GoogleAuthTokenDto from './dto/google-auth-token.dto';
 
 @ApiTags('Auth')
-@Controller('auth')
+@Controller('api/v1/auth')
 export class AuthController {
         private logger: Logger = new Logger(AuthService.name);
 
