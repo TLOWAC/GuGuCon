@@ -4,10 +4,13 @@ import { PassportStrategy } from '@nestjs/passport';
 import { UserService } from 'apis/v1/user/user.service';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-type JWTPayload = {
+type JwtPayload = {
         username: string;
-        sub: number;
+        sub: string;
+        iat: number;
+        exp: number;
 };
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
         constructor(private userService: UserService, private configService: ConfigService) {
@@ -17,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                         secretOrKey: configService.get<string>('JWT_SECRET'),
                 });
         }
-        async validate(payload: JWTPayload) {
+        async validate(payload: JwtPayload) {
                 const { username } = payload;
                 const user = await this.userService.findUserByEmail({ username });
                 if (!user) {
