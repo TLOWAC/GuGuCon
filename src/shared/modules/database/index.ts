@@ -1,1 +1,1 @@
-export * from './mysqlModule.module';
+export * from './mysql.module';
