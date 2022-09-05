@@ -1,5 +1,6 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import chalk from 'chalk';
+import { Request } from 'express';
 const isEmpty = (obj) => JSON.stringify(obj) === '{}';
 
 @Injectable()
@@ -7,8 +8,8 @@ export class HttpLoggerMiddleware implements NestMiddleware {
         logger = new Logger('HTTP');
         log = (...args) => this.logger.log(chalk.magenta(...args));
 
-        use(req: any, _res: any, next: () => void) {
-                const { body, params, query } = req;
+        use(req: Request, _res: any, next: () => void) {
+                const { body, params, query, headers } = req;
                 const requestUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
                 this.log(
                         '---------------------------------------------------------------------------------',
