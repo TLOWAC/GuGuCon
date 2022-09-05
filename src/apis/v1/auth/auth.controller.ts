@@ -21,7 +21,6 @@ import { ApiBody, ApiOperation, ApiProperty, ApiResponse, ApiTags } from '@nestj
 import { User } from '@@database/entities';
 import { LocalAuthGuard } from '@@shared/guards/local-auth.guard';
 
-import { GetUser } from '../../../shared/decorators/get-user.decorator';
 import { AuthService } from './auth.service';
 import { loginUserDTO, RegisterUserDTO } from './dto';
 import GoogleAuthTokenDto from './dto/google-auth-token.dto';
