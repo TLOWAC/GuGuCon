@@ -11,7 +11,8 @@ import { FindOptionsWhere } from 'typeorm';
 import { User } from '@@database/entities';
 import { UserRepository } from '@@database/repositories';
 
-import { JwtValidateDTO, RegisterUserDTO } from '../auth/dto';
+import { RegisterUserDTO } from '../auth/dto';
+
 @Injectable()
 export class UserService {
         private logger: Logger = new Logger(UserService.name);
