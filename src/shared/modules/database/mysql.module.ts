@@ -24,4 +24,4 @@ import { TypeOrmModule } from '@nestjs/typeorm';
                 }),
         ],
 })
-export class DatabaseModule {}
+export class MySQLModule {}
