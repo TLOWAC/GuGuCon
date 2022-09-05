@@ -13,9 +13,9 @@ export class Swagger {
 
         private build() {
                 const options = new DocumentBuilder()
-                        .setTitle('NestJS Realworld Example App')
-                        .setDescription('The Realworld API description')
-                        .setVersion('1.0')
+                        .setTitle('TLOWAC')
+                        .setDescription('TLOWAC API SERVER')
+                        .setVersion('1.0.0')
                         .addBearerAuth()
                         .build();
 
