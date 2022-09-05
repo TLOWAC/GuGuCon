@@ -36,6 +36,7 @@ export class AuthService {
                         if (!user || !isvalidPassword) {
                                 throw new NotAcceptableException('no matching user exist');
                         }
+                        return user;
                 } catch (e) {
                         this.logger.error(e);
                 }
