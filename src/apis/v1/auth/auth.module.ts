@@ -19,10 +19,10 @@ import { LocalStrategy } from './strategies/local.strategy';
                         inject: [ConfigService],
                         useFactory: (config: ConfigService) => ({
                                 secret: config.get<string>('JWT_SECRET'),
-                                signOptions: { expiresIn: '60s' },
+                                signOptions: { expiresIn: '7d' },
                         }),
                 }),
-                PassportModule,
+                PassportModule.register({ defaultStrategy: 'jwt' }),
         ],
         exports: [JwtStrategy],
 })
