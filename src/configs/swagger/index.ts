@@ -16,6 +16,7 @@ export class Swagger {
                         .setTitle('TLOWAC')
                         .setDescription('TLOWAC API SERVER')
                         .setVersion('1.0.0')
+                        .setBasePath('api/v1')
                         .addBearerAuth()
                         .build();
 
