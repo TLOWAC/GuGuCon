@@ -20,9 +20,9 @@
                 "baseUrl": "./src",
                 "paths": {
                         "@/*": ["/*"],
-                        "@@shared/*": ["shared/*"],
-                        "@@database/*": ["database/*"],
-                        "@@environments/*": ["environments/*"]
+                        "@/shared/*": ["shared/*"],
+                        "@/database/*": ["database/*"],
+                        "@/environments/*": ["environments/*"]
                 }
         },
         "exclude": ["node_modules", "dist"]
