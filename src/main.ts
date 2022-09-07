@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, VersioningType } from '@nestjs/common';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -39,6 +39,9 @@ class ExpressServer {
 
         public async setup() {
                 this.app = await NestFactory.create(AppModule);
+                this.app.setGlobalPrefix('api');
+                this.app.enableVersioning({ type: VersioningType.URI, prefix: 'v' });
+
                 this.config = this.app.get(ConfigService);
                 this.swagger = new Swagger(this.app);
 

@@ -1,16 +1,32 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
 import { PassportModule } from '@nestjs/passport';
 
 import { LoggingInterceptor } from '@@shared/interceptors';
 import { HttpLoggerMiddleware } from '@@shared/middlewares';
+import { EnvModule, MySQLModule } from '@@shared/modules';
 
 import { AuthModule } from './apis/v1/auth/auth.module';
 import { UserModule } from './apis/v1/user/user.module';
-import { CoreModule } from './libs/core.module';
 
 @Module({
-        imports: [CoreModule, UserModule, AuthModule, PassportModule],
+        imports: [
+                EnvModule,
+                MySQLModule,
+                PassportModule,
+                UserModule,
+                AuthModule,
+                RouterModule.register([
+                        {
+                                path: 'user',
+                                module: UserModule,
+                        },
+                        {
+                                path: 'auth',
+                                module: AuthModule,
+                        },
+                ]),
+        ],
         controllers: [],
         providers: [
                 {
