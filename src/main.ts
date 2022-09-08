@@ -4,9 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { Swagger } from 'configs';
 import cookieParser from 'cookie-parser';
+import csurf from 'csurf';
 import helmet from 'helmet';
 
-import { bootTerminalPrint } from '@@shared/utils';
+import { bootTerminalPrint } from '@/shared/utils';
 
 import { AppModule } from './app.module';
 
@@ -19,21 +20,24 @@ class ExpressServer {
                 ///
         }
 
-        private pipeBuild() {
+        private buildPipe() {
                 this.app.useGlobalPipes(
                         new ValidationPipe({
-                                whitelist: true,
-                                forbidNonWhitelisted: true,
+                                whitelist: true, // DTO 에 정의되지 않은 값은 필터링된다.
+                                forbidNonWhitelisted: true, // DTO 에 정의되지 않는 값이 입력되는 경우 에러메시지 출력
+                                transform: true, // 컨트롤러가 값을 받을때 컨트롤러에 정의한 타입으로 형변환
                         }),
                 );
         }
 
-        private middlewareBuild() {
-                this.app.use(helmet());
+        private buileMiddleware() {
+                this.app.use(helmet()); // http 보안관련 헤더 설정
+                this.app.enableCors(); // cors ( Cross Origin Resource Sharing ) 설정
+                this.app.use(csurf()); // csrf ( Cross Site Request Forgery ) 설정
                 this.app.use(cookieParser());
         }
 
-        private documentBuild() {
+        private buildDocument() {
                 this.swagger.pageSetup();
         }
 
@@ -45,12 +49,13 @@ class ExpressServer {
                 this.config = this.app.get(ConfigService);
                 this.swagger = new Swagger(this.app);
 
-                this.middlewareBuild();
-                this.pipeBuild();
-                this.documentBuild();
+                this.buileMiddleware();
+                this.buildPipe();
+                this.buildDocument();
         }
 
         public async start() {
+                await this.setup();
                 await this.app.listen(this.config.get('port'), () => {
                         Logger.log(`server running on http://localhost:${this.config.get('port')}`);
                         Logger.log(
@@ -66,7 +71,7 @@ class ExpressServer {
 
 async function main() {
         const expressServer = new ExpressServer();
-        await expressServer.setup();
+        // await expressServer.setup();
         await expressServer.start();
 }
 
