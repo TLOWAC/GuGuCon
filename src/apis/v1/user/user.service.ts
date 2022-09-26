@@ -1,17 +1,18 @@
 import {
         BadRequestException,
+        ConflictException,
         Injectable,
         Logger,
         NotFoundException,
         UseFilters,
-} from '@nestjs/common';
-import bcryptjs from 'bcryptjs';
-import { FindOptionsWhere } from 'typeorm';
+} from "@nestjs/common";
+import bcryptjs from "bcryptjs";
+import { FindOptionsWhere } from "typeorm";
 
-import { User } from '@@database/entities';
-import { UserRepository } from '@@database/repositories';
+import { User } from "@/database/entities";
+import { UserRepository } from "@/database/repositories";
 
-import { RegisterUserDTO } from '../auth/dto';
+import { RegisterUserRequestDTO } from "../auth/dto";
 
 @Injectable()
 export class UserService {
@@ -32,7 +33,7 @@ export class UserService {
                         if (user) {
                                 return user;
                         }
-                        throw new NotFoundException('user not found');
+                        throw new NotFoundException("user not found");
                 } catch (e) {
                         this.logger.error(e);
                 }
@@ -44,7 +45,7 @@ export class UserService {
                         if (user) {
                                 return user;
                         }
-                        throw new NotFoundException('user not found');
+                        throw new NotFoundException("user not found");
                 } catch (e) {
                         this.logger.error(e);
                 }
@@ -60,8 +61,9 @@ export class UserService {
         async checkUserExisted(options: { username: string }) {
                 try {
                         const { username } = options;
-                        const isRegisterUser = await this.userRepository.getUserBy({ username });
-                        if (isRegisterUser) {
+                        const user = await this.userRepository.getUserBy({ username });
+
+                        if (user) {
                                 return true;
                         }
                         return false;
@@ -70,14 +72,14 @@ export class UserService {
                 }
         }
 
-        async createUser(registerUserDto: RegisterUserDTO) {
+        async createUser(registerUserDto: RegisterUserRequestDTO) {
                 try {
                         const { username, password } = registerUserDto;
 
-                        const isUserExisted = this.checkUserExisted({ username });
+                        const isUserExisted = await this.checkUserExisted({ username });
 
                         if (isUserExisted) {
-                                throw new BadRequestException('이미 회원가입한 유저 입니다.');
+                                throw new ConflictException("이미 회원가입한 유저 입니다.");
                         }
 
                         const salt = bcryptjs.genSaltSync();
@@ -88,10 +90,11 @@ export class UserService {
                                 isActive: false,
                                 username,
                                 password: hashedPassword,
-                                firstName: 'firstName',
-                                lastName: 'lastName',
+                                firstName: "firstName",
+                                lastName: "lastName",
                                 age: 20,
                                 point: 100,
+                                salt,
                         });
                         return user;
                 } catch (e) {

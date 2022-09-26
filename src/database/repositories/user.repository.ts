@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, FindOptionsWhere, Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DeleteResult, FindOptionsWhere, Repository } from "typeorm";
 
-import { User } from '@@database/entities';
+import { User } from "@/database/entities";
 
 /**
  * crud naming convention
@@ -27,7 +27,7 @@ export class UserRepository {
                 return this.userRepo.findOneBy(options);
         }
 
-        async createUser(options: User): Promise<User> {
+        async createUser(options: Omit<User, "validatePassword">): Promise<User> {
                 return this.userRepo.save(options);
         }
 

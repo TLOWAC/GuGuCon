@@ -8,24 +8,26 @@ import {
         Post,
         Request,
         UseGuards,
-} from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
-import { JwtAuthGuard } from '@@shared/guards/jwt-auth.guard';
+import { User } from "@/database/entities";
+import { JwtAuthGuard } from "@/shared/guards/jwt-auth.guard";
 
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserService } from './user.service';
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { UserService } from "./user.service";
 
-@ApiTags('User')
-@Controller('api/v1/user')
+@ApiTags("User")
+@Controller()
 export class UserController {
         constructor(private readonly userService: UserService) {}
 
         @UseGuards(JwtAuthGuard)
         @ApiBearerAuth()
-        @Get('profile')
+        @Get("profile")
         getProfile(@Request() req) {
-                return req.user;
+                const { username } = req.user as User;
+                return this.userService.findUserByEmail({ username });
         }
 }
