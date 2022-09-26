@@ -1,18 +1,20 @@
-import { INestApplication, VersioningType } from '@nestjs/common';
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
-import { Swagger } from 'configs';
-import cookieParser from 'cookie-parser';
-import csurf from 'csurf';
-import helmet from 'helmet';
+import { INestApplication, VersioningType } from "@nestjs/common";
+import { Logger, ValidationPipe } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { NestFactory } from "@nestjs/core";
+import { NestExpressApplication } from "@nestjs/platform-express";
+import { Swagger } from "configs";
+import cookieParser from "cookie-parser";
+import csurf from "csurf";
+import helmet from "helmet";
+import path from "path";
 
-import { bootTerminalPrint } from '@/shared/utils';
+import { bootTerminalPrint } from "@/shared/utils";
 
-import { AppModule } from './app.module';
+import { AppModule } from "./app.module";
 
 class ExpressServer {
-        app: INestApplication;
+        app: NestExpressApplication;
         config: ConfigService;
         swagger: Swagger;
 
@@ -33,8 +35,11 @@ class ExpressServer {
         private buileMiddleware() {
                 this.app.use(helmet()); // http 보안관련 헤더 설정
                 this.app.enableCors(); // cors ( Cross Origin Resource Sharing ) 설정
-                this.app.use(csurf()); // csrf ( Cross Site Request Forgery ) 설정
+                // this.app.use(csurf()); // csrf ( Cross Site Request Forgery ) 설정
                 this.app.use(cookieParser());
+                this.app.useStaticAssets(path.join(__dirname, "public")); // 템플릿 엔진 설정
+                this.app.setBaseViewsDir(path.join(__dirname, "views"));
+                this.app.setViewEngine("hbs");
         }
 
         private buildDocument() {
@@ -42,9 +47,9 @@ class ExpressServer {
         }
 
         public async setup() {
-                this.app = await NestFactory.create(AppModule);
-                this.app.setGlobalPrefix('api');
-                this.app.enableVersioning({ type: VersioningType.URI, prefix: 'v' });
+                this.app = await NestFactory.create<NestExpressApplication>(AppModule);
+                this.app.setGlobalPrefix("api");
+                this.app.enableVersioning({ type: VersioningType.URI, prefix: "v" });
 
                 this.config = this.app.get(ConfigService);
                 this.swagger = new Swagger(this.app);
@@ -56,14 +61,14 @@ class ExpressServer {
 
         public async start() {
                 await this.setup();
-                await this.app.listen(this.config.get('port'), () => {
-                        Logger.log(`server running on http://localhost:${this.config.get('port')}`);
+                await this.app.listen(this.config.get("port"), () => {
+                        Logger.log(`server running on http://localhost:${this.config.get("port")}`);
                         Logger.log(
                                 `swagger running on http://localhost:${this.config.get(
-                                        'port',
+                                        "port",
                                 )}/docs`,
                         );
-                        Logger.log(`Running in ${this.config.get('environment')} mode`);
+                        Logger.log(`Running in ${this.config.get("environment")} mode`);
                         Logger.log(bootTerminalPrint());
                 });
         }
