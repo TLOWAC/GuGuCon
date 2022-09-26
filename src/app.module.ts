@@ -1,13 +1,13 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
-import { PassportModule } from '@nestjs/passport';
+import { MiddlewareConsumer, Module, RequestMethod } from "@nestjs/common";
+import { APP_INTERCEPTOR, RouterModule } from "@nestjs/core";
+import { PassportModule } from "@nestjs/passport";
 
-import { LoggingInterceptor } from '@@shared/interceptors';
-import { HttpLoggerMiddleware } from '@@shared/middlewares';
-import { EnvModule, MySQLModule } from '@@shared/modules';
+import { LoggingInterceptor } from "@/shared/interceptors";
+import { HttpLoggerMiddleware } from "@/shared/middlewares";
+import { EnvModule, MySQLModule } from "@/shared/modules";
 
-import { AuthModule } from './apis/v1/auth/auth.module';
-import { UserModule } from './apis/v1/user/user.module';
+import { AuthModule } from "./apis/v1/auth/auth.module";
+import { UserModule } from "./apis/v1/user/user.module";
 
 @Module({
         imports: [
@@ -18,11 +18,11 @@ import { UserModule } from './apis/v1/user/user.module';
                 AuthModule,
                 RouterModule.register([
                         {
-                                path: 'user',
+                                path: "user",
                                 module: UserModule,
                         },
                         {
-                                path: 'auth',
+                                path: "auth",
                                 module: AuthModule,
                         },
                 ]),
@@ -38,7 +38,7 @@ import { UserModule } from './apis/v1/user/user.module';
 export class AppModule {
         configure(consumer: MiddlewareConsumer) {
                 consumer.apply(HttpLoggerMiddleware).forRoutes({
-                        path: '*',
+                        path: "*",
                         method: RequestMethod.ALL,
                 });
         }
