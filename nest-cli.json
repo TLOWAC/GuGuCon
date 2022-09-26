@@ -1,13 +1,23 @@
 {
-  "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
-  "plugins": [
-    {
-      "name": "@nestjs/swagger",
-      "options": {
-        "classValidatorShim": false,
-        "introspectComments": true
-      }
-    }
-  ]
+        "collection": "@nestjs/schematics",
+        "sourceRoot": "src",
+        "plugins": [
+                {
+                        "name": "@nestjs/swagger",
+                        "options": {
+                                "classValidatorShim": false,
+                                "introspectComments": true
+                        }
+                }
+        ],
+        "compilerOptions": {
+                "assets": [
+                        {
+                                "include": "./views",
+                                "outDir": "dist/src",
+                                "watchAssets": true
+                        }
+                ],
+                "watchAssets": true
+        }
 }
