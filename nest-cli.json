@@ -13,9 +13,8 @@
         "compilerOptions": {
                 "assets": [
                         {
-                                "include": "./views",
-                                "outDir": "dist/src",
-                                "watchAssets": true
+                                "include": "**/*.hbs",
+                                "outDir": "dist/src"
                         }
                 ],
                 "watchAssets": true
