@@ -22,7 +22,8 @@
                         "@/*": ["/*"],
                         "@/shared/*": ["shared/*"],
                         "@/database/*": ["database/*"],
-                        "@/environments/*": ["environments/*"]
+                        "@/environments/*": ["environments/*"],
+                        "@/provider/*": ["shared/provider/*"]
                 }
         },
         "exclude": ["node_modules", "dist"]
