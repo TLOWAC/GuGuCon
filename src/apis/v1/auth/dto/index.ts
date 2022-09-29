@@ -3,3 +3,4 @@ export * from "./loginUserRequest.dto";
 export * from "./loginUserResponse.dto";
 export * from "./registerUserRequest.dto";
 export * from "./registerUserResponse.dto";
+export * from "./resetPasswordRequest.dto";
