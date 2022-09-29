@@ -12,6 +12,10 @@ const validationSchema = Joi.object({
         OAUTH_GOOGLE_CLIENT_ID: Joi.string(),
         OAUTH_GOOGLE_CLIENT_SECRET: Joi.string(),
         OAUTH_CALLBACK_URL: Joi.string(),
+        MAIL_HOST: Joi.string(),
+        MAIL_USER: Joi.string(),
+        MAIL_PASSWORD: Joi.string(),
+        MAIL_FROM: Joi.string(),
 });
 
 export { validationSchema };

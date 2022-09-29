@@ -11,6 +11,10 @@ function configuration() {
                 oauth_google_client_id: process.env.OAUTH_GOOGLE_CLIENT_ID,
                 oauth_google_client_secret: process.env.OAUTH_GOOGLE_CLIENT_SECRET,
                 oauth_google_callback_url: process.env.OAUTH_CALLBACK_URL,
+                mail_host: process.env.MAIL_HOST,
+                mail_user: process.env.MAIL_USER,
+                mail_password: process.env.MAIL_PASSWORD,
+                mail_from: process.env.MAIL_FROM,
         };
 }
 
