@@ -6,13 +6,11 @@ import { PassportModule } from "@nestjs/passport";
 import { UserModule } from "../user/user.module";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
-import { GoogleStrategy } from "./strategies/google.strategy";
-import { JwtStrategy } from "./strategies/jwt.strategy";
-import { LocalStrategy } from "./strategies/local.strategy";
+import { GoogleStrategy, JwtStrategy, KakaoStrategy, LocalStrategy } from "./strategies";
 
 @Module({
         controllers: [AuthController],
-        providers: [AuthService, JwtStrategy, LocalStrategy, GoogleStrategy],
+        providers: [AuthService, JwtStrategy, LocalStrategy, GoogleStrategy, KakaoStrategy],
         imports: [
                 UserModule,
                 JwtModule.registerAsync({
