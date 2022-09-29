@@ -1,22 +1,22 @@
-import { HttpException, HttpStatus, Logger } from '@nestjs/common';
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-import chalk from 'chalk';
-import { Request, Response } from 'express';
-import prettyjson, { RendererOptions } from 'prettyjson';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpException, HttpStatus, Logger } from "@nestjs/common";
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
+import chalk from "chalk";
+import { Request, Response } from "express";
+import prettyjson, { RendererOptions } from "prettyjson";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
         private request: Request;
         private response: Response;
         private prettyJsonConfig: RendererOptions = {
-                keysColor: 'rainbow',
-                dashColor: 'magenta',
+                keysColor: "rainbow",
+                dashColor: "magenta",
                 // stringColor: 'white',
                 defaultIndentation: 4,
         };
-        private logger: Logger = new Logger('HTTP');
+        private logger: Logger = new Logger("HTTP");
         /**
          * 사용자 요청 전/후 실행
          * @param context Interface describing details about the current request pipeline.
@@ -45,7 +45,7 @@ export class LoggingInterceptor implements NestInterceptor {
          * request 로그 출력
          */
         private loggingRequest() {
-                const { originalUrl, method, params, query, body, headers } = this.request;
+                const { originalUrl, method, params, query, body } = this.request;
                 const reqFormat = {
                         timestamp: new Date().toISOString(),
                         originalUrl,
@@ -53,7 +53,6 @@ export class LoggingInterceptor implements NestInterceptor {
                         params,
                         query,
                         body,
-                        headers,
                 };
 
                 this.logger.log(
@@ -95,7 +94,7 @@ export class LoggingInterceptor implements NestInterceptor {
                                 ? error.getStatus()
                                 : HttpStatus.INTERNAL_SERVER_ERROR;
                 const message =
-                        error instanceof HttpException ? error.message : 'Internal server error';
+                        error instanceof HttpException ? error.message : "Internal server error";
 
                 const { url, method } = this.request;
 
