@@ -4,8 +4,9 @@ import {
         Get,
         Ip,
         Logger,
+        NotFoundException,
         Post,
-        Render,
+        Put,
         Req,
         Request,
         Res,
@@ -15,10 +16,11 @@ import {
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response as ExpressResponse } from "express";
 
-import { User } from "@/database/entities";
 import { GoogleAuthGuard } from "@/shared/guards/google-auth.guard";
 import { LocalAuthGuard } from "@/shared/guards/local-auth.guard";
+import { MailService } from "@/shared/providers/email/mail.service";
 
+import { UserService } from "../user/user.service";
 import { AuthService } from "./auth.service";
 import {
         LoginOauth2GoogleRequest,
@@ -26,6 +28,7 @@ import {
         LoginUserResponseDTO,
         RegisterUserRequestDTO,
         RegisterUserResponseDTO,
+        ResetPasswordRequestDTO,
 } from "./dto";
 
 @ApiTags("Auth")
@@ -33,7 +36,11 @@ import {
 export class AuthController {
         private logger: Logger = new Logger(AuthService.name);
 
-        constructor(private readonly authService: AuthService) {}
+        constructor(
+                private readonly authService: AuthService,
+                private readonly userService: UserService,
+                private readonly mailService: MailService,
+        ) {}
 
         @Post("signIn")
         @ApiOperation({
@@ -92,12 +99,21 @@ export class AuthController {
                 this.logger.log("user", user);
         }
 
-        @Get("hbs")
         @ApiOperation({
-                summary: "hbs 템플릿 테스트",
+                summary: "로그인 > 비밀번호 찾기 ( 임시 패스워드 메일 발송 )",
         })
-        @Render("auth")
-        hbs() {
-                return "";
+        @Put("resetPassword")
+        async resetPassword(@Body() body: ResetPasswordRequestDTO) {
+                const { username } = body;
+
+                const user = await this.userService.findUserByEmail({ username });
+
+                if (!user) {
+                        throw new NotFoundException("user not found");
+                }
+
+                const newPwd = await user.resetPassword();
+
+                const _ret = await this.mailService.resetPassword({ temporaryPassword: newPwd }); // 임시 패스워드 메일 발송
         }
 }
