@@ -37,8 +37,8 @@ class ExpressServer {
                 this.app.enableCors(); // cors ( Cross Origin Resource Sharing ) 설정
                 // this.app.use(csurf()); // csrf ( Cross Site Request Forgery ) 설정
                 this.app.use(cookieParser());
-                this.app.useStaticAssets(path.join(__dirname, "public")); // 템플릿 엔진 설정
-                this.app.setBaseViewsDir(path.join(__dirname, "views"));
+                this.app.useStaticAssets(path.join(__dirname, "..", "public")); // 템플릿 엔진 설정
+                this.app.setBaseViewsDir(path.join(__dirname, "..", "views"));
                 this.app.setViewEngine("hbs");
         }
 
@@ -62,14 +62,16 @@ class ExpressServer {
         public async start() {
                 await this.setup();
                 await this.app.listen(this.config.get("port"), () => {
-                        Logger.log(`server running on http://localhost:${this.config.get("port")}`);
-                        Logger.log(
+                        Logger.debug(bootTerminalPrint());
+                        Logger.debug(`NODE_ENV ${this.config.get("environment")}`);
+                        Logger.debug(
+                                `server running on http://localhost:${this.config.get("port")}`,
+                        );
+                        Logger.debug(
                                 `swagger running on http://localhost:${this.config.get(
                                         "port",
                                 )}/docs`,
                         );
-                        Logger.log(`Running in ${this.config.get("environment")} mode`);
-                        Logger.log(bootTerminalPrint());
                 });
         }
 }
